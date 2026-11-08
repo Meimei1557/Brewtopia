@@ -19,17 +19,16 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
-  // Firebase: bila google-services.json belum ada, app tetap jalan (mode offline).
+  // Inisialisasi Firebase satu kali. Jika konfigurasi/platform belum tersedia,
+  // aplikasi tetap dapat berjalan menggunakan repository offline.
   var firebaseReady = false;
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     firebaseReady = true;
   } catch (e) {
-    debugPrint('Firebase belum dikonfigurasi, mode offline: $e');
+    debugPrint('Firebase belum siap, aplikasi berjalan dalam mode offline: $e');
   }
 
   await setupDependencies(firebaseReady: firebaseReady);
